@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我们为什么迷恋人格测试</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3ecdc;
+    --paper-dark: #e8dec5;
+    --paper-deep: #d8cba8;
+    --ink: #15140f;
+    --ink-soft: #2a2823;
+    --red: #b8341f;
+    --red-deep: #7a1f12;
+    --gray: #6e6557;
+    --gray-soft: #9a9082;
+    --gold: #a8853c;
+    --serif: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+    --sans: 'Noto Sans SC', -apple-system, sans-serif;
+    --display: 'Playfair Display', Georgia, serif;
+    --mono: 'DM Mono', 'Courier New', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(184, 52, 31, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(168, 133, 60, 0.05) 0%, transparent 50%);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.012) 2px, rgba(0,0,0,0.012) 3px);
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+
+  section {
+    min-height: 100vh;
+    padding: 5rem 7vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid rgba(21, 20, 15, 0.08);
+  }
+
+  .nav-rail {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .nav-rail a {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--gray);
+    font-family: var(--mono);
+    font-size: 11px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background: rgba(243, 236, 220, 0.6);
+    backdrop-filter: blur(4px);
+  }
+  .nav-rail a:hover, .nav-rail a.active {
+    color: var(--red);
+    border-color: var(--red);
+    background: var(--paper);
+  }
+  .nav-rail a::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    margin-right: 12px;
+    padding: 4px 10px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--serif);
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+  }
+  .nav-rail a:hover::before { opacity: 1; }
+  .nav-rail a:nth-child(1)::before { content: '封面'; }
+  .nav-rail a:nth-child(2)::before { content: '你做过几个？'; }
+  .nav-rail a:nth-child(3)::before { content: '我的5份档案'; }
+  .nav-rail a:nth-child(4)::before { content: '巴纳姆陷阱'; }
+  .nav-rail a:nth-child(5)::before { content: 'MBTI 起源'; }
+  .nav-rail a:nth-child(6)::before { content: '心理学解释'; }
+  .nav-rail a:nth-child(7)::before { content: '通货膨胀'; }
+  .nav-rail a:nth-child(8)::before { content: '反思'; }
+  .nav-rail a:nth-child(9)::before { content: '终章'; }
+
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: var(--paper);
+    border-bottom: 1px solid rgba(21, 20, 15, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    z-index: 99;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+  .progress-bar {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--red);
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ============ HERO ============ */
+  #hero {
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    height: 100%;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1rem;
+    margin-bottom: 3rem;
+    grid-column: 1 / -1;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(3rem, 9vw, 8.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .hero-title .red-mark {
+    color: var(--red);
+    font-style: italic;
+    font-family: var(--display);
+  }
+  .hero-subtitle {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: var(--gray);
+    margin-top: 2rem;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .hero-side {
+    border-left: 1px solid rgba(21, 20, 15, 0.15);
+    padding-left: 2rem;
+    padding-bottom: 2rem;
+  }
+  .hero-side h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .toc-list {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc-list li {
+    counter-increment: toc;
+    padding: 0.5rem 0;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    border-bottom: 1px dotted rgba(21, 20, 15, 0.15);
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+  .toc-list li::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--red);
+    font-family: var(--mono);
+    font-size: 11px;
+    margin-right: 1rem;
+    align-self: center;
+  }
+  .toc-list li span:last-child {
+    color: var(--gray);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .scroll-cue::after {
+    content: '↓';
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 16px;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 6px); }
+  }
+
+  /* ============ SECTION SHARED ============ */
+  .chapter-mark {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .chapter-mark::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--red);
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+  .section-title em {
+    color: var(--red);
+    font-style: italic;
+    font-family: var(--display);
+  }
+  .section-lede {
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    line-height: 1.7;
+    max-width: 720px;
+    color: var(--ink-soft);
+    margin-bottom: 3rem;
+  }
+
+  /* ============ SECTION 2: TEST CHECKLIST ============ */
+  #section-quiz {
+    background: var(--paper);
+  }
+  .quiz-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .test-pill {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 14px 18px;
+    cursor: pointer;
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--ink);
+    transition: all 0.25s;
+    text-align: left;
+    position: relative;
+    user-select: none;
+  }
+  .test-pill::before {
+    content: '○';
+    margin-right: 10px;
+    color: var(--gray);
+    font-family: var(--mono);
+  }
+  .test-pill.checked {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .test-pill.checked::before {
+    content: '●';
+    color: var(--red);
+  }
+  .test-pill:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--red); }
+  .test-pill .pill-en {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray-soft);
+    margin-top: 2px;
+    letter-spacing: 0.1em;
+  }
+  .test-pill.checked .pill-en { color: var(--paper-deep); }
+
+  .quiz-result {
+    background: var(--paper-dark);
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--ink);
+    position: sticky;
+    top: 5rem;
+  }
+  .quiz-counter {
+    font-family: var(--display);
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--red);
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-counter-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-verdict {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--ink);
+    border-top: 1px solid rgba(21, 20, 15, 0.2);
+    padding-top: 1.5rem;
+    min-height: 100px;
+  }
+  .quiz-verdict strong {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* ============ SECTION 3: MY 5 TESTS ============ */
+  #section-files {
+    background: var(--paper-dark);
+  }
+  .files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .file-card {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+  }
+  .file-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--red);
+  }
+  .file-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .file-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .file-stamp {
+    background: var(--red);
+    color: var(--paper);
+    padding: 2px 6px;
+  }
+  .file-name {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .file-result {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--red);
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+  .file-tag {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+  }
+  .file-note {
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    border-top: 1px dashed rgba(21, 20, 15, 0.2);
+    padding-top: 1rem;
+    margin-top: auto;
+  }
+  .file-note::before {
+    content: '编辑批注 / EDITOR';
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* ============ SECTION 4: BARNUM ============ */
+  #section-barnum { background: var(--ink); color: var(--paper); }
+  #section-barnum .chapter-mark { color: var(--paper-deep); }
+  #section-barnum .chapter-mark::before { background: var(--paper-deep); }
+  #section-barnum .section-title { color: var(--paper); }
+  #section-barnum .section-title em { color: #f5b041; }
+  #section-barnum .section-lede { color: var(--paper-dark); }
+  
+  .barnum-stage {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 3rem;
+    max-width: 720px;
+    margin: 1rem auto;
+    border-left: 6px solid var(--red);
+    position: relative;
+  }
+  .barnum-stage::before {
+    content: '心理学家分析报告';
+    position: absolute;
+    top: -12px;
+    left: 2rem;
+    background: var(--paper);
+    padding: 0 0.8rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--red);
+  }
+  .barnum-text {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--ink-soft);
+  }
+  .rating-box {
+    margin-top: 2rem;
+    background: var(--ink-soft);
+    color: var(--paper);
+    padding: 2rem;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  .rating-box.hidden { display: none; }
+  .rating-question {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .rating-scale {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .rating-btn {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--paper-deep);
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .rating-btn:hover { background: var(--red); border-color: var(--red); }
+  .rating-btn.selected { background: #f5b041; color: var(--ink); border-color: #f5b041; }
+
+  .reveal-box {
+    margin-top: 2rem;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    background: var(--red-deep);
+    color: var(--paper);
+    border: 1px solid #f5b041;
+    display: none;
+  }
+  .reveal-box.show { display: block; animation: revealUp 0.6s ease-out; }
+  @keyframes revealUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #f5b041;
+    letter-spacing: 0.3em;
+    margin-bottom: 1rem;
+  }
+  .reveal-title {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .reveal-body {
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .reveal-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(245, 176, 65, 0.3);
+  }
+  .reveal-stat .num {
+    font-family: var(--display);
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #f5b041;
+    line-height: 1;
+  }
+  .reveal-stat .desc {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* ============ SECTION 5: HISTORY ============ */
+  #section-history { background: var(--paper); }
+  .timeline {
+    margin-top: 3rem;
+    position: relative;
+    padding-left: 2rem;
+    border-left: 2px solid var(--ink);
+  }
+  .timeline-item {
+    padding: 1.5rem 0 1.5rem 2rem;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.6rem;
+    top: 2rem;
+    width: 14px;
+    height: 14px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+  }
+  .timeline-item.accent::before {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .timeline-year {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .timeline-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .timeline-body {
+    font-family: var(--serif);
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* ============ SECTION 6: PSYCHOLOGY ============ */
+  #section-psych { background: var(--paper-dark); }
+  .psych-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .psych-card {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .psych-card::after {
+    content: '+';
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-family: var(--mono);
+    font-size: 24px;
+    color: var(--red);
+    font-weight: 300;
+    transition: transform 0.3s;
+  }
+  .psych-card.expanded::after { transform: rotate(45deg); }
+  .psych-card:hover { background: var(--paper); border-color: var(--red); }
+  .psych-num {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 3rem;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 1rem;
+    font-weight: 900;
+  }
+  .psych-name {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .psych-en {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+  .psych-summary {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .psych-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    font-family: var(--serif);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .psych-card.expanded .psych-detail {
+    max-height: 400px;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(21, 20, 15, 0.2);
+  }
+
+  /* ============ SECTION 7: INFLATION ============ */
+  #section-inflation { background: var(--paper); }
+  .spectrum-wrap {
+    margin-top: 3rem;
+    position: relative;
+  }
+  .spectrum-axis {
+    height: 3px;
+    background: linear-gradient(to right, var(--ink), var(--red), var(--gold));
+    margin: 60px 0 100px;
+    position: relative;
+  }
+  .spectrum-axis::before, .spectrum-axis::after {
+    position: absolute;
+    top: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+  .spectrum-axis::before { content: '严肃科学 / serious'; left: 0; }
+  .spectrum-axis::after { content: '纯粹解构 / absurd'; right: 0; }
+
+  .spectrum-point {
+    position: absolute;
+    transform: translate(-50%, 0);
+    cursor: pointer;
+    text-align: center;
+  }
+  .spectrum-dot {
+    width: 18px;
+    height: 18px;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    margin: -10px auto 0;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 2;
+  }
+  .spectrum-point:hover .spectrum-dot,
+  .spectrum-point.active .spectrum-dot {
+    background: var(--red);
+    border-color: var(--red);
+    transform: scale(1.4);
+  }
+  .spectrum-label {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--ink);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 4px;
+  }
+  .spectrum-point.active .spectrum-label,
+  .spectrum-point:hover .spectrum-label {
+    color: var(--red);
+    border-color: var(--red);
+  }
+  .spectrum-en {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray);
+    margin-top: 18px;
+    letter-spacing: 0.1em;
+  }
+  .spectrum-detail {
+    background: var(--paper-dark);
+    border-left: 4px solid var(--red);
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    min-height: 180px;
+  }
+  .spectrum-detail h4 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  .spectrum-detail .sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+  .spectrum-detail p {
+    font-family: var(--serif);
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  /* ============ SECTION 8: REFLECTION ============ */
+  #section-reflection {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  #section-reflection .chapter-mark { color: #f5b041; }
+  #section-reflection .chapter-mark::before { background: #f5b041; }
+  #section-reflection .section-title { color: var(--paper); }
+  
+  .quote-stack {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .quote-block {
+    border-left: 3px solid var(--red);
+    padding: 1rem 0 1rem 2rem;
+    max-width: 800px;
+  }
+  .quote-block:nth-child(even) {
+    margin-left: auto;
+    border-left: none;
+    border-right: 3px solid #f5b041;
+    padding: 1rem 2rem 1rem 0;
+    text-align: right;
+  }
+  .quote-text {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    line-height: 1.4;
+    color: var(--paper);
+    margin-bottom: 0.8rem;
+  }
+  .quote-source {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-soft);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ============ SECTION 9: FINALE ============ */
+  #section-finale { 
+    background: var(--paper);
+    text-align: center;
+  }
+  .finale-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .finale-question {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 2rem 0 3rem;
+  }
+  .easter-button {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.05em;
+  }
+  .easter-button:hover {
+    background: var(--red);
+    border-color: var(--red);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .easter-result {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: var(--paper-dark);
+    border: 1px solid var(--ink);
+    text-align: left;
+    display: none;
+  }
+  .easter-result.show { display: block; animation: revealUp 0.6s ease-out; }
+  .easter-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.3em;
+    margin-bottom: 0.8rem;
+  }
+  .easter-type {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .easter-zh {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .easter-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .easter-trait {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 10px;
+    letter-spacing: 0.1em;
+  }
+  .easter-desc {
+    font-family: var(--serif);
+    line-height: 1.8;
+    color: var(--ink-soft);
+    border-top: 1px dashed rgba(21, 20, 15, 0.3);
+    padding-top: 1rem;
+  }
+  .easter-meta {
+    margin-top: 1.5rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+  .easter-meta strong { color: var(--red); }
+  .easter-again {
+    margin-top: 1.5rem;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+  }
+  .easter-again:hover { background: var(--ink); color: var(--paper); }
+
+  .colophon {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(21, 20, 15, 0.2);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-side { border-left: none; border-top: 1px solid rgba(21, 20, 15, 0.15); padding-left: 0; padding-top: 2rem; }
+    .quiz-layout { grid-template-columns: 1fr; }
+    .test-grid { grid-template-columns: 1fr; }
+    .nav-rail { display: none; }
+    .quiz-result { position: static; }
+    section { padding: 4rem 6vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span>SBTI 03 / 课堂演讲</span>
+  <span>2026 春季 · 选题报告</span>
+  <div class="progress-bar" id="progress"></div>
+</div>
+
+<nav class="nav-rail">
+  <a href="#hero">01</a>
+  <a href="#section-quiz">02</a>
+  <a href="#section-files">03</a>
+  <a href="#section-barnum">04</a>
+  <a href="#section-history">05</a>
+  <a href="#section-psych">06</a>
+  <a href="#section-inflation">07</a>
+  <a href="#section-reflection">08</a>
+  <a href="#section-finale">09</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-meta">
+    <span>Vol. 01 · 课堂演讲</span>
+    <span>—— 主题分享 ——</span>
+    <span>专题：人格测试社会学</span>
+  </div>
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-title">
+        我们为什么<br>
+        如此<span class="red-mark">迷恋</span><br>
+        人格测试
+      </h1>
+      <p class="hero-subtitle">
+        从 MBTI 到"你像哪个领导人"——<br>
+        一场关于自我命名的集体狂欢，<br>
+        以及它背后的心理机制。
+      </p>
+    </div>
+    <aside class="hero-side">
+      <h4>本期目录 / Contents</h4>
+      <ol class="toc-list">
+        <li><span>你做过几个？</span><span>p.02</span></li>
+        <li><span>我的5份档案</span><span>p.03</span></li>
+        <li><span>巴纳姆陷阱</span><span>p.04</span></li>
+        <li><span>MBTI 起源</span><span>p.05</span></li>
+        <li><span>心理学解释</span><span>p.06</span></li>
+        <li><span>测试通货膨胀</span><span>p.07</span></li>
+        <li><span>标签的反噬</span><span>p.08</span></li>
+        <li><span>最后一个问题</span><span>p.09</span></li>
+      </ol>
+    </aside>
+  </div>
+  <div class="scroll-cue">向下滚动开始</div>
+</section>
+
+<section id="section-quiz">
+  <div class="chapter-mark">第一幕 · CHAPTER ONE</div>
+  <h2 class="section-title">先做个<em>统计</em></h2>
+  <p class="section-lede">下列测试，你做过哪些？请如实点击。这堂课开始之前，我想知道——你和我之间，有几分相像。</p>
+  
+  <div class="quiz-layout">
+    <div class="test-grid" id="test-grid">
+      <button class="test-pill" data-test="mbti">MBTI 16型人格<span class="pill-en">16 Personalities</span></button>
+      <button class="test-pill" data-test="bigfive">大五人格<span class="pill-en">Big Five</span></button>
+      <button class="test-pill" data-test="enneagram">九型人格<span class="pill-en">Enneagram</span></button>
+      <button class="test-pill" data-test="disc">DISC 测试<span class="pill-en">DISC Profile</span></button>
+      <button class="test-pill" data-test="zodiac">星座 / 上升星座<span class="pill-en">Astrology</span></button>
+      <button class="test-pill" data-test="bazi">八字 / 紫微<span class="pill-en">Chinese Astrology</span></button>
+      <button class="test-pill" data-test="8values">8values 政治倾向<span class="pill-en">8values</span></button>
+      <button class="test-pill" data-test="leader">像哪个领导人<span class="pill-en">cnleader</span></button>
+      <button class="test-pill" data-test="hogwarts">霍格沃茨分院<span class="pill-en">Hogwarts House</span></button>
+      <button class="test-pill" data-test="sbti">SBTI 等恶搞测试<span class="pill-en">Parody Tests</span></button>
+    </div>
+    <div class="quiz-result">
+      <div class="quiz-counter-label">已选数量 / Tally</div>
+      <div class="quiz-counter" id="counter">0</div>
+      <div class="quiz-verdict" id="verdict">
+        点击你做过的测试。每多选一个，结论就会变化一次。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="section-files">
+  <div class="chapter-mark">第二幕 · CHAPTER TWO</div>
+  <h2 class="section-title">我的<em>5份</em>"自我档案"</h2>
+  <p class="section-lede">仅最近半年，我把自己丢进了五个不同的盒子里。从严肃心理学到完全的恶搞——而我，每一个都认真做完了。</p>
+  
+  <div class="files-grid">
+    <div class="file-card">
+      <div class="file-meta">
+        <span>档案 No.01</span>
+        <span class="file-stamp">主流</span>
+      </div>
+      <div class="file-name">MBTI 16型人格</div>
+      <div class="file-result">INTP-O-H</div>
+      <span class="file-tag">学者型 · 内向 90%</span>
+      <div class="file-note">最国民的入门款。号称"建筑师的对手"，实际上是"想太多的代名词"。i人/e人这个词，从这里发源。</div>
+    </div>
+    
+    <div class="file-card">
+      <div class="file-meta">
+        <span>档案 No.02</span>
+        <span class="file-stamp">亚文化</span>
+      </div>
+      <div class="file-name">8values 政治光谱</div>
+      <div class="file-result">自由主义</div>
+      <span class="file-tag">平等60% · 国家60% · 自由59% · 传统61%</span>
+      <div class="file-note">把宏大叙事变成几条彩条。年轻人用它互相辨认"同志"，再决定要不要加好友。</div>
+    </div>
+    
+    <div class="file-card">
+      <div class="file-meta">
+        <span>档案 No.03</span>
+        <span class="file-stamp">玩梗</span>
+      </div>
+      <div class="file-name">像哪个领导人</div>
+      <div class="file-result">胡锦涛 84%</div>
+      <span class="file-tag">务实程度 64 · 危机应对 33</span>
+      <div class="file-note">把历史人物算法化。它的火爆说明：测试越是"不可能",我们越想做。</div>
+    </div>
+    
+    <div class="file-card">
+      <div class="file-meta">
+        <span>档案 No.04</span>
+        <span class="file-stamp">混搭</span>
+      </div>
+      <div class="file-name">原型人物匹配</div>
+      <div class="file-result">萨拉姆型</div>
+      <span class="file-tag">法理 · 程序 · 技术官僚倾向</span>
+      <div class="file-note">"制度秩序9 / 发展导向8" 听起来非常专业。但谁能解释这九个维度从哪来？没人知道，也没人在意。</div>
+    </div>
+    
+    <div class="file-card">
+      <div class="file-meta">
+        <span>档案 No.05</span>
+        <span class="file-stamp">解构</span>
+      </div>
+      <div class="file-name">SBTI 人格测试</div>
+      <div class="file-result">DRUN-K · 酒鬼</div>
+      <span class="file-tag">匹配度 100% · 隐藏人格已激活</span>
+      <div class="file-note">"乙醇亲和性过强,系统已直接跳过常规人格审判。"——当人格测试开始嘲笑人格测试本身,我们也乐于接受这个结果。</div>
+    </div>
+  </div>
+</section>
+
+<section id="section-barnum">
+  <div class="chapter-mark">第三幕 · CHAPTER THREE</div>
+  <h2 class="section-title">一个<em>小实验</em></h2>
+  <p class="section-lede">在讲心理学之前,先请你做一件事:认真读完下面这段对你的描述,然后给出一个分数。这段话是基于你刚才的选择,系统为你生成的"专属分析"。</p>
+  
+  <div class="barnum-stage">
+    <p class="barnum-text">
+      你需要别人喜欢和敬佩你,但你倾向于挑剔自己。虽然你的性格也有一些弱点,但通常你能够弥补它们。<br><br>
+      你拥有相当大的、尚未被开发的潜力。在外人看来你是自律、自控的,但内心其实充满不安和忧虑。有时你会怀疑自己是否做出了正确的决定,或采取了正确的行动。<br><br>
+      你倾向于享受一定程度的变化和多样性,当被规则和限制束缚时会感到不满。你以独立思考自豪,不轻易接受没有充分证据的他人的意见。但你也发现,把自己完全展示给别人是不明智的。
+    </p>
+  </div>
+  
+  <div class="rating-box" id="rating-box">
+    <div class="rating-question">这段话描述你的<strong>准确度</strong>是?</div>
+    <div class="rating-scale" id="rating-scale">
+      <button class="rating-btn" data-score="1">1</button>
+      <button class="rating-btn" data-score="2">2</button>
+      <button class="rating-btn" data-score="3">3</button>
+      <button class="rating-btn" data-score="4">4</button>
+      <button class="rating-btn" data-score="5">5</button>
+      <button class="rating-btn" data-score="6">6</button>
+      <button class="rating-btn" data-score="7">7</button>
+      <button class="rating-btn" data-score="8">8</button>
+      <button class="rating-btn" data-score="9">9</button>
+      <button class="rating-btn" data-score="10">10</button>
+    </div>
+  </div>
+  
+  <div class="reveal-box" id="reveal-box">
+    <div class="reveal-label">REVEAL · 真相揭晓</div>
+    <div class="reveal-title">这段话不是为你写的——它是为<u>所有人</u>写的。</div>
+    <div class="reveal-body">
+      1948年,心理学家 Bertram Forer 把这段话发给了班上39名学生,告诉他们这是"基于人格测试为你定制的分析"。<br><br>
+      事实上,他们拿到的是<strong>同一段话</strong>——他从星座专栏里拼凑出来的。学生们仍然给出了如下评价:
+    </div>
+    <div class="reveal-stat">
+      <span class="num">4.26</span>
+      <span class="desc">满分5分。<br>这就是"巴纳姆效应"的诞生——模糊、正面、普适的描述,会让大多数人觉得"说的就是我"。</span>
+    </div>
+  </div>
+</section>
+
+<section id="section-history">
+  <div class="chapter-mark">第四幕 · CHAPTER FOUR</div>
+  <h2 class="section-title">MBTI:一个母女项目<br>如何征服<em>全世界</em></h2>
+  <p class="section-lede">人格测试不是从科学实验室来的——它从一个家庭厨房来。</p>
+  
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1921</div>
+      <div class="timeline-title">卡尔·荣格出版《心理类型》</div>
+      <div class="timeline-body">提出内向/外向、思维/情感等二分维度——为后来的MBTI提供理论种子。荣格本人从未把它当作分类工具。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1942</div>
+      <div class="timeline-title">Briggs 母女登场</div>
+      <div class="timeline-body">凯瑟琳·布里格斯和女儿伊莎贝尔·迈尔斯——两位<strong>没有心理学专业背景</strong>的家庭主妇,基于荣格的理论开始开发问卷。</div>
+    </div>
+    <div class="timeline-item accent">
+      <div class="timeline-year">1944</div>
+      <div class="timeline-title">二战实用主义:女性岗位匹配</div>
+      <div class="timeline-body">最初的目的非常具体:战时大量女性进入工厂,需要一个工具帮她们找到"适合的岗位"。它从一开始就不是为了科学,而是为了实用。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1962</div>
+      <div class="timeline-title">第一个正式版本发布</div>
+      <div class="timeline-body">教育测试服务局(ETS)出版,正式进入企业HR、咨询界。但学术心理学界从未真正接纳它——主流人格研究用的是"大五人格"。</div>
+    </div>
+    <div class="timeline-item accent">
+      <div class="timeline-year">2024+</div>
+      <div class="timeline-title">中文互联网的"i人/e人"时代</div>
+      <div class="timeline-body">从社交App的个人简介,到相亲档案,再到求职关键词——MBTI成了一种通用社交语言。一个二战时期的妇女岗位工具,八十年后被中国年轻人用来开启对话。</div>
+    </div>
+  </div>
+</section>
+
+<section id="section-psych">
+  <div class="chapter-mark">第五幕 · CHAPTER FIVE</div>
+  <h2 class="section-title">我们为什么<em>停不下来</em></h2>
+  <p class="section-lede">不准为什么还火?——四个心理学解释。点击展开。</p>
+  
+  <div class="psych-grid">
+    <div class="psych-card" data-psych="0">
+      <div class="psych-num">01</div>
+      <div class="psych-name">巴纳姆效应</div>
+      <div class="psych-en">BARNUM EFFECT</div>
+      <div class="psych-summary">模糊而正面的描述,所有人都觉得"说的就是我"。我们刚刚已经在自己身上做过这个实验了。</div>
+      <div class="psych-detail">关键不是测试有多准,而是描述<strong>同时让你觉得"被看见了"和"被赞美了"</strong>。MBTI的16个类型里没有"懒惰"或"愚蠢"——每一个类型都有正面描述。这是它和星座共享的设计哲学。</div>
+    </div>
+    <div class="psych-card" data-psych="1">
+      <div class="psych-num">02</div>
+      <div class="psych-name">自我认知的脚手架</div>
+      <div class="psych-en">SELF-NARRATIVE</div>
+      <div class="psych-summary">"认识你自己"是几千年来的母题。但内省其实很难,大多数人需要一套现成的语言。</div>
+      <div class="psych-detail">"我是INTP"比"我是一个安静、爱思考、不擅长社交、有时优柔寡断、对系统有兴趣的人"<strong>更短、更可分享、更可记忆</strong>。它是一种身份的压缩格式,就像头像比真人更容易传播。</div>
+    </div>
+    <div class="psych-card" data-psych="2">
+      <div class="psych-num">03</div>
+      <div class="psych-name">不确定性的安抚剂</div>
+      <div class="psych-en">UNCERTAINTY RELIEF</div>
+      <div class="psych-summary">"我为什么是这样"比"我应该怎样"焦虑得多。测试给出一个看似科学的答案。</div>
+      <div class="psych-detail">在一个充满不确定的时代——找不到工作、社交焦虑、关系不稳定——人格测试提供了一种<strong>"身份的合法化"</strong>:你是这样的人,所以你这样很正常。这是一种廉价但有效的心理安慰。</div>
+    </div>
+    <div class="psych-card" data-psych="3">
+      <div class="psych-num">04</div>
+      <div class="psych-name">部落归属的捷径</div>
+      <div class="psych-en">TRIBAL SHORTCUT</div>
+      <div class="psych-summary">"我们i人……"是一种新的部落语言。一个标签,瞬间筛出"自己人"。</div>
+      <div class="psych-detail">现代社会的关系成本越来越高,人格标签成了<strong>低成本筛选工具</strong>。相亲档案上写MBTI,招聘里用DISC,朋友群按九型分组——测试结果不只是关于"我",更是关于"我和谁站在一起"。</div>
+    </div>
+  </div>
+</section>
+
+<section id="section-inflation">
+  <div class="chapter-mark">第六幕 · CHAPTER SIX</div>
+  <h2 class="section-title">测试的<em>通货膨胀</em></h2>
+  <p class="section-lede">当MBTI变得过于主流,新的亚文化需要新的标签。我的5份档案,正好可以排在这条光谱上——从严肃科学,到纯粹解构。</p>
+  
+  <div class="spectrum-wrap">
+    <div class="spectrum-axis">
+      <div class="spectrum-point" style="left: 12%;" data-spec="0">
+        <div class="spectrum-label">MBTI</div>
+        <div class="spectrum-dot"></div>
+        <div class="spectrum-en">2024 mainstream</div>
+      </div>
+      <div class="spectrum-point" style="left: 35%;" data-spec="1">
+        <div class="spectrum-label">8values</div>
+        <div class="spectrum-dot"></div>
+        <div class="spectrum-en">subculture</div>
+      </div>
+      <div class="spectrum-point" style="left: 58%;" data-spec="2">
+        <div class="spectrum-label">像哪个领导人</div>
+        <div class="spectrum-dot"></div>
+        <div class="spectrum-en">historical meme</div>
+      </div>
+      <div class="spectrum-point" style="left: 78%;" data-spec="3">
+        <div class="spectrum-label">原型匹配</div>
+        <div class="spectrum-dot"></div>
+        <div class="spectrum-en">obscure layer</div>
+      </div>
+      <div class="spectrum-point" style="left: 92%;" data-spec="4">
+        <div class="spectrum-label">SBTI</div>
+        <div class="spectrum-dot"></div>
+        <div class="spectrum-en">parody</div>
+      </div>
+    </div>
+    
+    <div class="spectrum-detail" id="spectrum-detail">
+      <div class="sub" id="spec-sub">点击光谱上的圆点查看</div>
+      <h4 id="spec-title">五个测试,一条进化路径</h4>
+      <p id="spec-body">每一次"主流"被消化,就有新的边缘出现。MBTI 还没退场,8values 已经流行;8values 还在卷,"像哪个领导人"接力;最终,SBTI 用恶搞的方式把整个游戏解构掉——但我们仍然认真做完了它。这个序列说明:我们追求的不是"准确",而是<strong>新鲜的自我描述</strong>。</p>
+    </div>
+  </div>
+</section>
+
+<section id="section-reflection">
+  <div class="chapter-mark">第七幕 · CHAPTER SEVEN</div>
+  <h2 class="section-title">标签的<em>反噬</em></h2>
+  <p class="section-lede" style="color: var(--paper-dark);">不能只夸不批。下面三句话,值得我们带走。</p>
+  
+  <div class="quote-stack">
+    <div class="quote-block">
+      <div class="quote-text">"测出'内向'之后,我反而更不愿意社交了。<br>标签不是描述我,而是开始<em>塑造</em>我。"</div>
+      <div class="quote-source">—— 自我实现预言 / Self-Fulfilling Prophecy</div>
+    </div>
+    <div class="quote-block">
+      <div class="quote-text">"把人压缩成几个字母,我们获得了便于谈论的语言,<br>但同时也忘记了——人本来比这复杂得多。"</div>
+      <div class="quote-source">—— 本质主义陷阱 / Essentialism Trap</div>
+    </div>
+    <div class="quote-block">
+      <div class="quote-text">"我们不是在做测试,<br>我们是在用测试一次次<em>塑造</em>自己。"</div>
+      <div class="quote-source">—— 韩炳哲《倦怠社会》注脚</div>
+    </div>
+  </div>
+</section>
+
+<section id="section-finale">
+  <div class="chapter-mark" style="justify-content: center;">最后一幕 · FINALE</div>
+  <h2 class="section-title">最后一个<em>问题</em></h2>
+  
+  <div class="finale-content">
+    <p class="finale-question">
+      我们真正迷恋的可能不是人格测试,<br>
+      而是"<em>我是谁</em>"这个问题本身。<br><br>
+      测试结果会变,平台会过气——<br>
+      但那个想要被看见、被理解、被命名的自己,<br>
+      一直都在。
+    </p>
+    
+    <button class="easter-button" id="easter-btn">用一个真正的测试结束这堂课 ↓</button>
+    
+    <div class="easter-result" id="easter-result">
+      <div class="easter-tag">SBTI · 隐藏人格已激活</div>
+      <div class="easter-type" id="easter-type">CLAS-S</div>
+      <div class="easter-zh" id="easter-zh">课堂走神型人格</div>
+      <div class="easter-traits" id="easter-traits">
+        <span class="easter-trait">注意力 38</span>
+        <span class="easter-trait">咖啡依赖 92</span>
+        <span class="easter-trait">假装在听 88</span>
+      </div>
+      <div class="easter-desc" id="easter-desc">
+        课堂上看似认真,实则灵魂已飘到食堂。这种人格的特点是:在被点名前的0.5秒能瞬间回神,并精准复述老师最后一句话。
+      </div>
+      <div class="easter-meta">
+        匹配度 <strong id="easter-match">99%</strong> · 基于巴纳姆效应自动生成
+      </div>
+      <button class="easter-again" id="easter-again">↻ 重新生成</button>
+    </div>
+    
+    <div class="colophon">
+      <span>End of Issue · 谢谢观看</span>
+      <span>SBTI · 我们都在测试中</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ============ Progress bar ============
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    progress.style.width = pct + '%';
+  });
+
+  // ============ Active nav ============
+  const navLinks = document.querySelectorAll('.nav-rail a');
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => observer.observe(s));
+
+  // ============ Section 2: Quiz ============
+  const verdicts = [
+    { min: 0, max: 0, text: '<strong>零个?</strong> 你是来自哪个星球?或者——你早就看穿了这一切?' },
+    { min: 1, max: 2, text: '<strong>1-2个,</strong> 还算克制。但既然来上这堂课了,接下来你大概也会被卷进去。' },
+    { min: 3, max: 4, text: '<strong>3-4个,</strong> 标准当代年轻人。你的社交简介里大概率写着MBTI。' },
+    { min: 5, max: 6, text: '<strong>5-6个,</strong> 你已经把"测试"当成一种娱乐方式了。这个数字本身就是这堂课的素材。' },
+    { min: 7, max: 99, text: '<strong>七个以上,</strong> 我的同类。这堂课就是为你而准备的——我们一起来反思一下我们自己。' }
+  ];
+  const counter = document.getElementById('counter');
+  const verdict = document.getElementById('verdict');
+  document.querySelectorAll('.test-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      pill.classList.toggle('checked');
+      const count = document.querySelectorAll('.test-pill.checked').length;
+      counter.textContent = count;
+      const v = verdicts.find(v => count >= v.min && count <= v.max);
+      verdict.innerHTML = v.text;
+    });
+  });
+
+  // ============ Section 4: Barnum ============
+  document.querySelectorAll('.rating-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(() => {
+        document.getElementById('reveal-box').classList.add('show');
+        document.getElementById('reveal-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 600);
+    });
+  });
+
+  // ============ Section 6: Psych cards ============
+  document.querySelectorAll('.psych-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('expanded');
+    });
+  });
+
+  // ============ Section 7: Spectrum ============
+  const specData = [
+    { sub: '档案 No.01 · 主流入门款', title: 'MBTI · 半正经心理学', body: '披着心理学外衣,实际上是一个家庭主妇项目的延续。但它最国民、最有社交资本——"i人/e人" 已经替代了星座,成为新的开场白。' },
+    { sub: '档案 No.02 · 政治亚文化', title: '8values · 立场标签化', body: '把宏大的政治主张变成 60% 平等、40% 市场——简洁、直观、可分享。年轻人用它互相辨认"同志",再决定要不要加好友。' },
+    { sub: '档案 No.03 · 历史人物玩梗', title: '像哪个领导人 · 把历史算法化', body: '它的设计师可能没想到这玩意会火。但越是不可能的对照——你真的能"像"胡锦涛吗?——人们越好奇答案。荒诞性本身就是吸引力。' },
+    { sub: '档案 No.04 · 加密层亚文化', title: '原型匹配 · 听起来很专业', body: '"制度秩序9 / 发展导向8" 这种表述,模仿了真实的政治学术语。但谁能解释这九个维度的科学依据?没人知道——也没人在意。这就是关键。' },
+    { sub: '档案 No.05 · 解构与反讽', title: 'SBTI · 测试嘲笑测试', body: '当一切测试都过于严肃,SBTI 用"酒鬼""社畜""躺平大师"来反讽。但讽刺的是——我们仍然认真做完它,并郑重地把结果发到朋友圈。' }
+  ];
+  document.querySelectorAll('.spectrum-point').forEach(point => {
+    point.addEventListener('click', () => {
+      document.querySelectorAll('.spectrum-point').forEach(p => p.classList.remove('active'));
+      point.classList.add('active');
+      const d = specData[point.dataset.spec];
+      document.getElementById('spec-sub').textContent = d.sub;
+      document.getElementById('spec-title').textContent = d.title;
+      document.getElementById('spec-body').innerHTML = d.body;
+    });
+  });
+
+  // ============ Section 9: Easter egg generator ============
+  const types = [
+    { en: 'CLAS-S', zh: '课堂走神型人格', traits: ['注意力38', '咖啡依赖92', '假装在听88'], desc: '看似认真听讲,实则灵魂已飘到食堂。这种人格的特点是:在被点名前的 0.5 秒能瞬间回神,并精准复述老师最后一句话。' },
+    { en: 'PROC-R', zh: '永久拖延型人格', traits: ['计划能力99', '执行能力2', 'DDL亲和性100'], desc: '你拥有完美的项目规划能力,以及让所有计划在 DDL 前 4 小时才开始的神奇天赋。系统已检测到你正在用这个测试逃避真正该做的事。' },
+    { en: 'OVER-T', zh: '过度共情型人格', traits: ['共情值95', '决断力20', 'EMO倾向88'], desc: '别人的烦恼对你来说就像自己的。你能记住每个朋友的星座、生日、宠物名字——但忘了昨天晚饭吃了什么。' },
+    { en: 'SLEE-P', zh: '困倦体质人格', traits: ['咖啡阈值94', '梦境清晰度3', '清醒时间≤8h'], desc: '一天有效清醒时间不超过 8 小时,其余在用咖啡续命或在脑内做白日梦。最佳工作状态出现在凌晨 2 点。' },
+    { en: 'OVER-A', zh: '过度分析型人格', traits: ['思考量120%', '行动量15%', '内耗值满'], desc: '你能把一句"在吗"分析出十二种含义。决定吃什么晚饭比写论文还累——这就是为什么你做了这么多人格测试。' },
+    { en: 'CHAR-G', zh: '社交快充人格', traits: ['对外热情99', '回家电量3', '续航时间≤2h'], desc: '在外人面前是 e 人,回家秒变 i 人。社交是一种快充行为,需要至少 24 小时充电才能再次使用。' },
+    { en: 'PERF-N', zh: '完美主义陷阱型', traits: ['标准值150', '自我接纳20', '永远在改稿'], desc: '稿子永远在"再改一版"中。其他人交付的版本你看了想哭——但你最终交的版本和那个差不多。' }
+  ];
+  const easterBtn = document.getElementById('easter-btn');
+  const easterResult = document.getElementById('easter-result');
+  const easterAgain = document.getElementById('easter-again');
+  
+  function generate() {
+    const t = types[Math.floor(Math.random() * types.length)];
+    document.getElementById('easter-type').textContent = t.en;
+    document.getElementById('easter-zh').textContent = t.zh;
+    const traitsEl = document.getElementById('easter-traits');
+    traitsEl.innerHTML = '';
+    t.traits.forEach(tr => {
+      const span = document.createElement('span');
+      span.className = 'easter-trait';
+      span.textContent = tr;
+      traitsEl.appendChild(span);
+    });
+    document.getElementById('easter-desc').textContent = t.desc;
+    document.getElementById('easter-match').textContent = (90 + Math.floor(Math.random() * 10)) + '%';
+  }
+  
+  easterBtn.addEventListener('click', () => {
+    generate();
+    easterResult.classList.add('show');
+    easterBtn.style.display = 'none';
+    setTimeout(() => {
+      easterResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 200);
+  });
+  easterAgain.addEventListener('click', () => {
+    generate();
+  });
+
+  // ============ Keyboard nav ============
+  document.addEventListener('keydown', (e) => {
+    const sectionsArr = Array.from(sections);
+    const currentIdx = sectionsArr.findIndex(s => {
+      const r = s.getBoundingClientRect();
+      return r.top >= -100 && r.top < window.innerHeight / 2;
+    });
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (currentIdx >= 0 && currentIdx < sectionsArr.length - 1) {
+        sectionsArr[currentIdx + 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentIdx > 0) {
+        sectionsArr[currentIdx - 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+</script>
+</body>
+</html>
